@@ -4,8 +4,10 @@ import com.example.dddproject.domain.model.Todo;
 import com.example.dddproject.domain.repository.TodoRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class TodoService {
@@ -16,7 +18,10 @@ public class TodoService {
     }
 
     public List<Todo> getAllTodos() {
-        return repository.findAll();
+        return repository.findAll()
+                .stream()
+                .sorted(Comparator.comparing(todo -> todo.getDescription().toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     public Todo createTodo(String description){
